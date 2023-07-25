@@ -1,28 +1,28 @@
-select * from PortfolioProject..CovidDeaths 
+п»їselect * from PortfolioProject..CovidDeaths 
 Where continent is not null
 order by 3,4
 
--- Выборка данных для использования
+-- Р’С‹Р±РѕСЂРєР° РґР°РЅРЅС‹С… РґР»СЏ РёСЃРїРѕР»СЊР·РѕРІР°РЅРёСЏ
 
 select Location, date, total_cases, new_cases, total_deaths, population
 from PortfolioProject..CovidDeaths
 order by 1,2 
 
--- Сравнение случаев заражения и случаев смерти, вероятность смерти
+-- РЎСЂР°РІРЅРµРЅРёРµ СЃР»СѓС‡Р°РµРІ Р·Р°СЂР°Р¶РµРЅРёСЏ Рё СЃР»СѓС‡Р°РµРІ СЃРјРµСЂС‚Рё, РІРµСЂРѕСЏС‚РЅРѕСЃС‚СЊ СЃРјРµСЂС‚Рё
 
 select Location, date, total_cases, new_cases, total_deaths, (total_deaths/total_cases)*100 as DeathPercentage
 from PortfolioProject..CovidDeaths
 where location like '%russia%'
 order by 1,2 
 
--- Сравнение количества зараженных и численности населения, сколько процентов заразилось
+-- РЎСЂР°РІРЅРµРЅРёРµ РєРѕР»РёС‡РµСЃС‚РІР° Р·Р°СЂР°Р¶РµРЅРЅС‹С… Рё С‡РёСЃР»РµРЅРЅРѕСЃС‚Рё РЅР°СЃРµР»РµРЅРёСЏ, СЃРєРѕР»СЊРєРѕ РїСЂРѕС†РµРЅС‚РѕРІ Р·Р°СЂР°Р·РёР»РѕСЃСЊ
 
 select Location, date, population, total_cases, total_deaths, (total_cases/population)*100 as InfectedPercentage
 from PortfolioProject..CovidDeaths
 where location like '%russia%'
 order by 1,2 
 
--- Страны с самым высокой долей заражения
+-- РЎС‚СЂР°РЅС‹ СЃ СЃР°РјС‹Рј РІС‹СЃРѕРєРѕР№ РґРѕР»РµР№ Р·Р°СЂР°Р¶РµРЅРёСЏ
 
 select Location, population, MAX(total_cases) as HighestInfectionCount, MAX((total_cases/population)*100) as InfectedPercentage
 from PortfolioProject..CovidDeaths
@@ -30,7 +30,7 @@ from PortfolioProject..CovidDeaths
 Group by Location, population
 order by InfectedPercentage desc
 
--- Страны с самой высокой смертностью
+-- РЎС‚СЂР°РЅС‹ СЃ СЃР°РјРѕР№ РІС‹СЃРѕРєРѕР№ СЃРјРµСЂС‚РЅРѕСЃС‚СЊСЋ
 
 select Location, MAX(cast(Total_deaths as int)) as TotalDeathCount
 from PortfolioProject..CovidDeaths
@@ -38,9 +38,9 @@ Where continent is not null
 Group by Location
 order by TotalDeathCount desc
 
--- Разбор данных по отдельным континентам
+-- Р Р°Р·Р±РѕСЂ РґР°РЅРЅС‹С… РїРѕ РѕС‚РґРµР»СЊРЅС‹Рј РєРѕРЅС‚РёРЅРµРЅС‚Р°Рј
 
--- Континенты с самой высокой смертностью
+-- РљРѕРЅС‚РёРЅРµРЅС‚С‹ СЃ СЃР°РјРѕР№ РІС‹СЃРѕРєРѕР№ СЃРјРµСЂС‚РЅРѕСЃС‚СЊСЋ
 
 select continent, MAX(cast(Total_deaths as int)) as TotalDeathCount
 from PortfolioProject..CovidDeaths
@@ -48,8 +48,8 @@ Where continent is not null
 Group by continent
 order by TotalDeathCount desc
 
--- Глобальные показатели
--- по датам
+-- Р“Р»РѕР±Р°Р»СЊРЅС‹Рµ РїРѕРєР°Р·Р°С‚РµР»Рё
+-- РїРѕ РґР°С‚Р°Рј
 
 select date, sum(new_cases) as total_cases, sum(cast(new_deaths as int)) as total_deaths, sum(cast(new_deaths as int))/sum(new_cases)*100 as DeathPercentage
 from PortfolioProject..CovidDeaths
@@ -58,7 +58,7 @@ where continent is not null
 group by date
 order by 1,2 
 
--- за все время
+-- Р·Р° РІСЃРµ РІСЂРµРјСЏ
 
 select sum(new_cases) as total_cases, sum(cast(new_deaths as int)) as total_deaths, sum(cast(new_deaths as int))/sum(new_cases)*100 as DeathPercentage
 from PortfolioProject..CovidDeaths
@@ -68,7 +68,7 @@ where continent is not null
 order by 1,2
 
 
--- Доля вакцинированного населения
+-- Р”РѕР»СЏ РІР°РєС†РёРЅРёСЂРѕРІР°РЅРЅРѕРіРѕ РЅР°СЃРµР»РµРЅРёСЏ
 
 
 select dea.continent, dea.location, dea.date, dea.population, vac.new_vaccinations
@@ -88,7 +88,7 @@ join PortfolioProject..CovidVaccinations as vac
 where dea.continent is not null
 order by 2,3;
 
--- Использование CTE
+-- РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ CTE
 
 With PopvsVac (Continent, Location, Date, Population, new_vaccinations, RollingPeopleVaccinated)
 as
@@ -105,7 +105,7 @@ where dea.continent is not null
 select *, (RollingPeopleVaccinated/Population)*100
 From popvsVac
 
--- Использование TEMP TABLE
+-- РСЃРїРѕР»СЊР·РѕРІР°РЅРёРµ TEMP TABLE
 
 Drop Table if exists #PrecentPopulationVaccinated
 Create Table #PrecentPopulationVaccinated
